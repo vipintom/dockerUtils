@@ -1,0 +1,39 @@
+services:
+  portainer:
+    extends:
+      file: ./portainer/docker-compose.yml
+      service: portainer
+    networks:
+      - monitoring-network
+  watchtower:
+    extends:
+      file: ./watchtower/docker-compose.yml
+      service: watchtower
+    networks:
+      - monitoring-network
+
+  beszel-hub:
+    extends:
+      file: ./beszel/docker-compose.yml
+      service: beszel-hub
+    networks:
+      - monitoring-network
+
+  beszel-agent:
+    extends:
+      file: ./beszel/docker-compose.yml
+      service: beszel-agent
+
+  kuma:
+    extends:
+      file: ./kuma/docker-compose.yml
+      service: uptime-kuma
+    networks:
+      - monitoring-network
+
+networks:
+  monitoring-network:
+    driver: bridge
+
+volumes:
+  beszel_socket:

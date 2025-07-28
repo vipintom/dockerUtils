@@ -1,0 +1,9 @@
+beszel/beszel_hub_data
+kuma/uptime-kuma-data
+netdata/netdatacache
+netdata/netdataconfig
+netdata/netdatalib
+portainer/portainer_data
+statping/statping
+.env
+GEMINI.md
