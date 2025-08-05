@@ -5,6 +5,7 @@ services:
       service: portainer
     networks:
       - monitoring-network
+
   watchtower:
     extends:
       file: ./watchtower/docker-compose.yml
@@ -31,9 +32,49 @@ services:
     networks:
       - monitoring-network
 
+  caddy:
+    extends:
+      file: ./caddy/docker-compose.yml
+      service: caddy
+
+  prometheus:
+    extends:
+      file: ./monitoring/docker-compose.yml
+      service: prometheus
+    networks:
+      - monitoring-network
+
+  grafana:
+    extends:
+      file: ./monitoring/docker-compose.yml
+      service: grafana
+    networks:
+      - monitoring-network
+
+  loki:
+    extends:
+      file: ./monitoring/docker-compose.yml
+      service: loki
+    networks:
+      - monitoring-network
+
+  promtail:
+    extends:
+      file: ./monitoring/docker-compose.yml
+      service: promtail
+    networks:
+      - monitoring-network
+
 networks:
   monitoring-network:
     driver: bridge
+  caddy-shared-network:
+    external: true
 
 volumes:
   beszel_socket:
+  caddy:
+  caddy_config:
+  prometheus_data:
+  grafana_data:
+  loki_data:

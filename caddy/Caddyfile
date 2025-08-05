@@ -1,0 +1,51 @@
+{
+	admin :2019
+	email tom.vipin@gmail.com
+	servers {
+		metrics
+	}
+	log {
+    output file /var/log/caddy/caddy_main.log {
+    	roll_size 100MiB
+    	roll_keep 5
+    	roll_keep_for 100d
+    }
+    format json
+    level INFO
+	}
+}
+
+# Health check
+:80, :443 {
+	respond /health 200
+}
+
+# Main domain
+010790.xyz {
+	respond "Welcome to 010790.xyz"
+}
+
+# Services
+portainer.010790.xyz {
+	reverse_proxy portainer:9000
+}
+
+kuma.010790.xyz {
+	reverse_proxy uptime-kuma:3001
+}
+
+#caddy.010790.xyz {
+#	reverse_proxy caddymanager-frontend:80
+#}
+
+beszel.010790.xyz {
+	reverse_proxy beszel-hub:8090
+}
+
+llm.010790.xyz {
+	reverse_proxy litellm:4000
+}
+
+grafana.010790.xyz {
+	reverse_proxy grafana:4004
+}

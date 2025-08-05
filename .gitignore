@@ -1,4 +1,5 @@
 beszel/beszel_hub_data
+beszel/beszel_agent_data
 kuma/uptime-kuma-data
 netdata/netdatacache
 netdata/netdataconfig
@@ -7,3 +8,5 @@ portainer/portainer_data
 statping/statping
 .env
 GEMINI.md
+CLAUDE.md
+*/logs

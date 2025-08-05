@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy:/data
+      - caddy_config:/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs/caddy:/var/log/caddy
+    networks:
+      - monitoring-network
+      - caddy-shared-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:2019/config/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  caddy:
+  caddy_config:
