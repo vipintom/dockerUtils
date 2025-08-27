@@ -5,6 +5,12 @@ services:
       service: portainer
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   watchtower:
     extends:
@@ -12,6 +18,12 @@ services:
       service: watchtower
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   beszel-hub:
     extends:
@@ -19,11 +31,23 @@ services:
       service: beszel-hub
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   beszel-agent:
     extends:
       file: ./beszel/docker-compose.yml
       service: beszel-agent
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   kuma:
     extends:
@@ -31,11 +55,23 @@ services:
       service: uptime-kuma
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   caddy:
     extends:
       file: ./caddy/docker-compose.yml
       service: caddy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   prometheus:
     extends:
@@ -43,6 +79,12 @@ services:
       service: prometheus
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   grafana:
     extends:
@@ -50,6 +92,12 @@ services:
       service: grafana
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   loki:
     extends:
@@ -57,6 +105,12 @@ services:
       service: loki
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
   promtail:
     extends:
@@ -64,6 +118,12 @@ services:
       service: promtail
     networks:
       - monitoring-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        compress: "true"
 
 networks:
   monitoring-network:

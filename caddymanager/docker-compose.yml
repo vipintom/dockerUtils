@@ -6,8 +6,8 @@ services:
     container_name: caddymanager-mongodb
     restart: unless-stopped
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=mongoadmin
-      - MONGO_INITDB_ROOT_PASSWORD=mBz2SMMt6H7XGCkGZVNCXXADqCPX3dWn
+      - MONGO_INITDB_ROOT_USERNAME=${CADDYMANAGER_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${CADDYMANAGER_DB_PASSWORD}
     volumes:
       - caddymanager_db:/data/db
     networks:

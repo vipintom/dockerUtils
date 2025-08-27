@@ -1,16 +1,28 @@
 {
 	admin :2019
 	email tom.vipin@gmail.com
-	servers {
-		metrics {
-			per_host
-		}
+
+	metrics {
+		per_host
 	}
+
 	log {
 		output file /var/log/caddy/caddy_main.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
+			roll_size 50MiB
+			roll_keep 3
+			roll_keep_for 30d
+		}
+		format json
+		level INFO
+	}
+}
+
+(log_to_file) {
+	log {
+		output file /var/log/caddy/{args[0]} {
+			roll_size 50MiB
+			roll_keep 3
+			roll_keep_for 30d
 		}
 		format json
 		level INFO
@@ -25,92 +37,36 @@
 # Main domain
 010790.xyz, www.010790.xyz {
 	respond "Welcome to 010790.xyz"
-	log {
-		output file /var/log/caddy/010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file 010790.xyz.log
 }
 
 # Services
 portainer.010790.xyz {
 	reverse_proxy portainer:9000
-	log {
-		output file /var/log/caddy/portainer.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file portainer.010790.xyz.log
 }
 
 kuma.010790.xyz {
 	reverse_proxy uptime-kuma:3001
-	log {
-		output file /var/log/caddy/kuma.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file kuma.010790.xyz.log
 }
 
 beszel.010790.xyz {
 	reverse_proxy beszel-hub:8090
-	log {
-		output file /var/log/caddy/beszel.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file beszel.010790.xyz.log
 }
 
 llm.010790.xyz {
 	reverse_proxy litellm:4000
-	log {
-		output file /var/log/caddy/llm.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file llm.010790.xyz.log
 }
 
 grafana.010790.xyz {
 	reverse_proxy grafana:4004
-	log {
-		output file /var/log/caddy/grafana.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file grafana.010790.xyz.log
 }
 
 api.padtaal.010790.xyz {
 	reverse_proxy padtaal_backend_api:8000
-	log {
-		output file /var/log/caddy/api.padtaal.010790.xyz.log {
-			roll_size 100MiB
-			roll_keep 5
-			roll_keep_for 100d
-		}
-		format json
-		level INFO
-	}
+	import log_to_file api.padtaal.010790.xyz.log
 }

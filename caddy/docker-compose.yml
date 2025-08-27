@@ -12,7 +12,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy:/data
       - caddy_config:/config
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      #      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./logs/caddy:/var/log/caddy
     networks:
       - monitoring-network

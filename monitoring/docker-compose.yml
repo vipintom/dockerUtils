@@ -8,6 +8,17 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
       - prometheus_data:/prometheus
+    tmpfs:
+      - /tmp:size=100M,noexec,nosuid,nodev
+      - /var/tmp:size=50M,noexec,nosuid,nodev
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=7d" # Reduce retention to 7 days
+      - "--storage.tsdb.retention.size=2GB" # Enforce a 2GB size limit
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.enable-lifecycle" # Enable hot-reloading of the config
     networks:
       - monitoring-network
     healthcheck:
@@ -35,6 +46,9 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     volumes:
       - grafana_data:/var/lib/grafana
+    tmpfs:
+      - /tmp:size=100M,noexec,nosuid,nodev
+      - /var/log/grafana:size=50M,noexec,nosuid,nodev
     networks:
       - monitoring-network
     healthcheck:
@@ -51,6 +65,8 @@ services:
     volumes:
       - ./loki-config.yaml:/etc/loki/local-config.yaml:ro
       - loki_data:/loki
+    tmpfs:
+      - /tmp:size=100M,noexec,nosuid,nodev
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - monitoring-network
