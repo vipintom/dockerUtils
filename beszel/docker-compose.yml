@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./beszel_hub_data:/beszel_data
+    ports:
+      - "${BESZEL_HUB_PORT:-8090}:8090"
     environment:
       - BESZEL_HUB_PORT=${BESZEL_HUB_PORT:-8090}
     labels:

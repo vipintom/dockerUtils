@@ -10,3 +10,4 @@ statping/statping
 GEMINI.md
 CLAUDE.md
 */logs
+.history/
