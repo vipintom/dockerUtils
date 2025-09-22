@@ -70,3 +70,68 @@ api.padtaal.010790.xyz {
 	reverse_proxy padtaal_backend_api:8000
 	import log_to_file api.padtaal.010790.xyz.log
 }
+
+enzo.010790.xyz {
+	reverse_proxy enzo-web-prod:80
+	import log_to_file enzo.010790.xyz.log
+}
+
+jellyfin.010790.xyz {
+	reverse_proxy jellyfin:8096 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+		header_up X-Forwarded-For {remote_ip}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-Host {host}
+	}
+	import log_to_file jellyfin.010790.xyz.log
+}
+
+sonarr.010790.xyz {
+	reverse_proxy sonarr:8989
+	import log_to_file sonarr.010790.xyz.log
+}
+
+radarr.010790.xyz {
+	reverse_proxy radarr:7878
+	import log_to_file sonarr.010790.xyz.log
+}
+
+prowlarr.010790.xyz {
+	reverse_proxy prowlarr:9696
+	import log_to_file prowlarr.010790.xyz.log
+}
+
+qbittorrent.010790.xyz {
+	reverse_proxy qbittorrent:8080
+	import log_to_file qbittorrent.010790.xyz.log
+}
+
+jellyseerr.010790.xyz {
+	reverse_proxy jellyseerr:5055
+	import log_to_file jellyseerr.010790.xyz.log
+}
+
+bazarr.010790.xyz {
+	reverse_proxy bazarr:6767
+	import log_to_file bazarr.010790.xyz.log
+}
+
+glance.010790.xyz {
+	reverse_proxy glance:8181
+	import log_to_file glance.010790.xyz.log
+}
+
+sidekick.010790.xyz {
+	reverse_proxy sidekick_frontend:80
+	import log_to_file sidekick.010790.xyz.log
+}
+
+sidekick-backend.010790.xyz {
+	reverse_proxy sidekick_backend:8000 {
+		header_up Host {host}
+		header_up X-Forwarded-For {remote_addr}
+		header_up X-Forwarded-Proto {scheme}
+	}
+	import log_to_file sidekick-backend.010790.xyz.log
+}

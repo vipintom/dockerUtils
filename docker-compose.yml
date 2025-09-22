@@ -1,129 +1,90 @@
+x-logging: &logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "5m"
+      max-file: "2"
+      compress: "true"
+
+x-monitoring-service: &monitoring-service
+  <<: *logging
+  networks:
+    - monitoring-network
+
 services:
   portainer:
+    <<: *monitoring-service
     extends:
       file: ./portainer/docker-compose.yml
       service: portainer
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   watchtower:
+    <<: *monitoring-service
     extends:
       file: ./watchtower/docker-compose.yml
       service: watchtower
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   beszel-hub:
+    <<: *monitoring-service
     extends:
       file: ./beszel/docker-compose.yml
       service: beszel-hub
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   beszel-agent:
+    <<: *logging
     extends:
       file: ./beszel/docker-compose.yml
       service: beszel-agent
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   kuma:
+    <<: *monitoring-service
     extends:
       file: ./kuma/docker-compose.yml
       service: uptime-kuma
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   caddy:
+    <<: *logging
     extends:
       file: ./caddy/docker-compose.yml
       service: caddy
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   prometheus:
+    <<: *monitoring-service
     extends:
       file: ./monitoring/docker-compose.yml
       service: prometheus
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   grafana:
+    <<: *monitoring-service
     extends:
       file: ./monitoring/docker-compose.yml
       service: grafana
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   loki:
+    <<: *monitoring-service
     extends:
       file: ./monitoring/docker-compose.yml
       service: loki
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
 
   promtail:
+    <<: *monitoring-service
     extends:
       file: ./monitoring/docker-compose.yml
       service: promtail
-    networks:
-      - monitoring-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "5m"
-        max-file: "2"
-        compress: "true"
+
+  restarter:
+    <<: *logging
+    container_name: restarter
+    image: index.docker.io/deduard/tools:restart-notifier-latest
+    restart: unless-stopped
+    environment:
+      RESTART_CONTAINERS: "${RESTART_CONTAINERS}"
+      RUN_ON_STARTUP: "${RUN_ON_STARTUP}"
+      CRON_SCHEDULE: "${CRON_SCHEDULE}"
+      CYCLE_PERIOD: "${CYCLE_PERIOD}"
+      TZ: "${TZ}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   monitoring-network:
