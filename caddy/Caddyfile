@@ -1,31 +1,18 @@
 {
-	admin :2019
 	email tom.vipin@gmail.com
-
-	metrics {
-		per_host
-	}
-
-	log {
-		output file /var/log/caddy/caddy_main.log {
-			roll_size 50MiB
-			roll_keep 3
-			roll_keep_for 30d
-		}
-		format json
-		level INFO
+	crowdsec {
+		api_url http://crowdsec:8080
+		api_key {$CROWDSEC_API_KEY}
 	}
 }
 
-(log_to_file) {
+(logging) {
 	log {
-		output file /var/log/caddy/{args[0]} {
-			roll_size 50MiB
-			roll_keep 3
-			roll_keep_for 30d
+		output file /var/log/caddy/access.log {
+			roll_size 10mb
+			roll_keep 5
 		}
 		format json
-		level INFO
 	}
 }
 
@@ -37,43 +24,38 @@
 # Main domain
 010790.xyz, www.010790.xyz {
 	respond "Welcome to 010790.xyz"
-	import log_to_file 010790.xyz.log
+	import logging
 }
 
 # Services
 portainer.010790.xyz {
 	reverse_proxy portainer:9000
-	import log_to_file portainer.010790.xyz.log
+	import logging
 }
 
 kuma.010790.xyz {
 	reverse_proxy uptime-kuma:3001
-	import log_to_file kuma.010790.xyz.log
+	import logging
 }
 
 beszel.010790.xyz {
 	reverse_proxy beszel-hub:8090
-	import log_to_file beszel.010790.xyz.log
+	import logging
 }
 
 llm.010790.xyz {
 	reverse_proxy litellm:4000
-	import log_to_file llm.010790.xyz.log
-}
-
-grafana.010790.xyz {
-	reverse_proxy grafana:4004
-	import log_to_file grafana.010790.xyz.log
+	import logging
 }
 
 api.padtaal.010790.xyz {
 	reverse_proxy padtaal_backend_api:8000
-	import log_to_file api.padtaal.010790.xyz.log
+	import logging
 }
 
 enzo.010790.xyz {
 	reverse_proxy enzo-web-prod:80
-	import log_to_file enzo.010790.xyz.log
+	import logging
 }
 
 jellyfin.010790.xyz {
@@ -84,47 +66,42 @@ jellyfin.010790.xyz {
 		header_up X-Forwarded-Proto {scheme}
 		header_up X-Forwarded-Host {host}
 	}
-	import log_to_file jellyfin.010790.xyz.log
+	import logging
 }
 
 sonarr.010790.xyz {
 	reverse_proxy sonarr:8989
-	import log_to_file sonarr.010790.xyz.log
+	import logging
 }
 
 radarr.010790.xyz {
 	reverse_proxy radarr:7878
-	import log_to_file sonarr.010790.xyz.log
+	import logging
 }
 
 prowlarr.010790.xyz {
 	reverse_proxy prowlarr:9696
-	import log_to_file prowlarr.010790.xyz.log
+	import logging
 }
 
 qbittorrent.010790.xyz {
 	reverse_proxy qbittorrent:8080
-	import log_to_file qbittorrent.010790.xyz.log
+	import logging
 }
 
 jellyseerr.010790.xyz {
 	reverse_proxy jellyseerr:5055
-	import log_to_file jellyseerr.010790.xyz.log
+	import logging
 }
 
 bazarr.010790.xyz {
 	reverse_proxy bazarr:6767
-	import log_to_file bazarr.010790.xyz.log
-}
-
-glance.010790.xyz {
-	reverse_proxy glance:8181
-	import log_to_file glance.010790.xyz.log
+	import logging
 }
 
 sidekick.010790.xyz {
 	reverse_proxy sidekick_frontend:80
-	import log_to_file sidekick.010790.xyz.log
+	import logging
 }
 
 sidekick-backend.010790.xyz {
@@ -133,5 +110,5 @@ sidekick-backend.010790.xyz {
 		header_up X-Forwarded-For {remote_addr}
 		header_up X-Forwarded-Proto {scheme}
 	}
-	import log_to_file sidekick-backend.010790.xyz.log
+	import logging
 }

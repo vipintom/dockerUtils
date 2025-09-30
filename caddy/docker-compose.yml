@@ -2,27 +2,58 @@ version: "3.8"
 
 services:
   caddy:
-    image: caddy:2-alpine
+    image: serfriz/caddy-crowdsec:latest
     container_name: caddy
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
+      - "443:443/udp"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy:/data
       - caddy_config:/config
-      #      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./logs/caddy:/var/log/caddy
-    networks:
-      - monitoring-network
-      - caddy-shared-network
+      - ./caddy_logs:/var/log/caddy
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:2019/config/"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--spider",
+          "--header='Host: 010790.xyz'",
+          "http://localhost/health",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
+    networks:
+      - monitoring-network
+      - caddy-shared-network
+    depends_on:
+      - crowdsec
+
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: unless-stopped
+    environment:
+      - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/base-http-scenarios crowdsecurity/linux
+      - GID=${GID:-1001}
+    volumes:
+      - crowdsec_config:/etc/crowdsec
+      - ./acquis.yaml:/etc/crowdsec/acquis.d/caddy.yaml:ro
+      - ./profiles.yaml:/etc/crowdsec/profiles.yaml:ro
+      - ./caddy_logs:/var/log/caddy:ro
+      - crowdsec_db:/var/lib/crowdsec/data
+    networks:
+      - caddy-shared-network
+    expose:
+      - 8080
 
 volumes:
   caddy:
   caddy_config:
+  crowdsec_db:
+  crowdsec_config:
+  metabase_data:
+    driver: local

@@ -44,33 +44,17 @@ services:
 
   caddy:
     <<: *logging
+    environment:
+      CROWDSEC_API_KEY: "${CROWDSEC_API_KEY}"
     extends:
       file: ./caddy/docker-compose.yml
       service: caddy
 
-  prometheus:
-    <<: *monitoring-service
+  crowdsec:
+    <<: *logging
     extends:
-      file: ./monitoring/docker-compose.yml
-      service: prometheus
-
-  grafana:
-    <<: *monitoring-service
-    extends:
-      file: ./monitoring/docker-compose.yml
-      service: grafana
-
-  loki:
-    <<: *monitoring-service
-    extends:
-      file: ./monitoring/docker-compose.yml
-      service: loki
-
-  promtail:
-    <<: *monitoring-service
-    extends:
-      file: ./monitoring/docker-compose.yml
-      service: promtail
+      file: ./caddy/docker-compose.yml
+      service: crowdsec
 
   restarter:
     <<: *logging
@@ -99,3 +83,5 @@ volumes:
   prometheus_data:
   grafana_data:
   loki_data:
+  crowdsec_db:
+  crowdsec_config:

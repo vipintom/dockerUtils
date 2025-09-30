@@ -29,6 +29,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./beszel_agent_data:/var/lib/beszel-agent
       - beszel_socket:/beszel_socket
+      - /home:/extra-filesystems/home:ro
     environment:
       LISTEN: 45876
       HUB_URL: http://127.0.0.1:${BESZEL_HUB_PORT:-8090}
@@ -43,7 +44,5 @@ services:
       retries: 3
       start_period: 5s
 volumes:
-  #beszel_hub_data:
-  #beszel_agent_data:
   beszel_socket:
     external: true

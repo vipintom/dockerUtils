@@ -1,0 +1,42 @@
+# --- Tier 4: For repeat offenders (3+ prior bans) ---
+name: tiered-ban-permaban
+filters:
+  - "GetDecisionsCount(Alert.Source.Value) >= 3"
+  - "Alert.Source.Value != '' && Alert.Source.Value != nil"
+decisions:
+  - type: ban
+    duration: 720h # 30 days
+on_success: break
+
+---
+# --- Tier 3: For offenders with 2 prior bans ---
+name: tiered-ban-long
+filters:
+  - "GetDecisionsCount(Alert.Source.Value) == 2"
+  - "Alert.Source.Value != '' && Alert.Source.Value != nil"
+decisions:
+  - type: ban
+    duration: 168h # 7 days
+on_success: break
+
+---
+# --- Tier 2: For offenders with 1 prior ban ---
+name: tiered-ban-medium
+filters:
+  - "GetDecisionsCount(Alert.Source.Value) == 1"
+  - "Alert.Source.Value != '' && Alert.Source.Value != nil"
+decisions:
+  - type: ban
+    duration: 24h
+on_success: break
+
+---
+# --- Tier 1: Default ban for first-time offenders ---
+name: default-ban
+filters:
+  - "GetDecisionsCount(Alert.Source.Value) == 0"
+  - "Alert.Source.Value != '' && Alert.Source.Value != nil"
+decisions:
+  - type: ban
+    duration: 4h
+on_success: break
