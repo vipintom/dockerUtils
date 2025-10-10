@@ -1,0 +1,17 @@
+services:
+  restarter:
+    container_name: restarter
+    image: index.docker.io/deduard/tools:restart-notifier-latest
+    restart: unless-stopped
+    environment:
+      RESTART_CONTAINERS: "${RESTART_CONTAINERS}"
+      RUN_ON_STARTUP: "${RUN_ON_STARTUP}"
+      CRON_SCHEDULE: "${CRON_SCHEDULE}"
+      CYCLE_PERIOD: "${CYCLE_PERIOD}"
+      TZ: "${TZ}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - monitoring-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

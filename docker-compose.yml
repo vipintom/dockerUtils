@@ -36,12 +36,6 @@ services:
       file: ./beszel/docker-compose.yml
       service: beszel-agent
 
-  kuma:
-    <<: *monitoring-service
-    extends:
-      file: ./kuma/docker-compose.yml
-      service: uptime-kuma
-
   caddy:
     <<: *logging
     environment:
@@ -58,17 +52,15 @@ services:
 
   restarter:
     <<: *logging
-    container_name: restarter
-    image: index.docker.io/deduard/tools:restart-notifier-latest
-    restart: unless-stopped
-    environment:
-      RESTART_CONTAINERS: "${RESTART_CONTAINERS}"
-      RUN_ON_STARTUP: "${RUN_ON_STARTUP}"
-      CRON_SCHEDULE: "${CRON_SCHEDULE}"
-      CYCLE_PERIOD: "${CYCLE_PERIOD}"
-      TZ: "${TZ}"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    extends:
+      file: ./restarter/docker-compose.yml
+      service: restarter
+
+  kuma:
+    <<: *monitoring-service
+    extends:
+      file: ./kuma/docker-compose.yml
+      service: uptime-kuma
 
 networks:
   monitoring-network:
@@ -80,8 +72,5 @@ volumes:
   beszel_socket:
   caddy:
   caddy_config:
-  prometheus_data:
-  grafana_data:
-  loki_data:
   crowdsec_db:
   crowdsec_config:

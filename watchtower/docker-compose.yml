@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   watchtower:
     image: containrrr/watchtower:latest
@@ -12,6 +10,9 @@ services:
     environment:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
-      - WATCHTOWER_POLL_INTERVAL=86400
+      - WATCHTOWER_SCHEDULE=0 0 5 * * *
+      - WATCHTOWER_TIMEOUT=60s
+      - WATCHTOWER_STOP_TIMEOUT=30s
+      - TZ=Asia/Kolkata
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

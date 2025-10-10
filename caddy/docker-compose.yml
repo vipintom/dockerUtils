@@ -31,6 +31,8 @@ services:
       - caddy-shared-network
     depends_on:
       - crowdsec
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
   crowdsec:
     image: crowdsecurity/crowdsec:latest
@@ -49,11 +51,11 @@ services:
       - caddy-shared-network
     expose:
       - 8080
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
 volumes:
   caddy:
   caddy_config:
   crowdsec_db:
   crowdsec_config:
-  metabase_data:
-    driver: local

@@ -9,8 +9,8 @@
 (logging) {
 	log {
 		output file /var/log/caddy/access.log {
-			roll_size 10mb
-			roll_keep 5
+			roll_size 100mb
+			roll_keep 2
 		}
 		format json
 	}
@@ -33,13 +33,13 @@ portainer.010790.xyz {
 	import logging
 }
 
-kuma.010790.xyz {
-	reverse_proxy uptime-kuma:3001
+beszel.010790.xyz {
+	reverse_proxy beszel-hub:8090
 	import logging
 }
 
-beszel.010790.xyz {
-	reverse_proxy beszel-hub:8090
+kuma.010790.xyz {
+	reverse_proxy uptime-kuma:3001
 	import logging
 }
 
@@ -99,16 +99,7 @@ bazarr.010790.xyz {
 	import logging
 }
 
-sidekick.010790.xyz {
-	reverse_proxy sidekick_frontend:80
-	import logging
-}
-
-sidekick-backend.010790.xyz {
-	reverse_proxy sidekick_backend:8000 {
-		header_up Host {host}
-		header_up X-Forwarded-For {remote_addr}
-		header_up X-Forwarded-Proto {scheme}
-	}
+atsumeru.010790.xyz {
+	reverse_proxy atsumeru:31337
 	import logging
 }

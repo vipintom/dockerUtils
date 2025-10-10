@@ -1,11 +1,9 @@
-version: "3.3"
-
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
     volumes:
       - ./uptime-kuma-data:/app/data
     restart: unless-stopped
-#volumes:
-#uptime-kuma-data:
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
